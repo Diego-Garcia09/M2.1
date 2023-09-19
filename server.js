@@ -26,13 +26,35 @@ const datos = {};
 
 const servidor = http.createServer((req, res) => {
   const { pathname, query } = url.parse(req.url, true);
-    console.log(query);//Aqui consigues lo del enlace
+    //console.log(query);//Aqui consigues lo del enlace
+
+
   if (req.method === 'GET') {
     // Manejo de solicitudes GET
     if (pathname === '/datos') {
+      console.log(query);
+      console.log(pathname);
+      console.log(pathname, query);
+      console.log(req.url);
+      console.log(req.headers);
       // Devuelve los datos almacenados como JSON
-      res.writeHead(200, { 'Content-Type': 'text/plain' });//Cambia text/plain a text/html
-      res.end(JSON.stringify(datos));//Aqui va el html
+      res.writeHead(200, { 'Content-Type': 'text/html' });//Cambia text/plain a text/html
+      res.end(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="UTF-8">
+          <meta http-equiv="X-UA-Compatible" content="IE-Edge">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Datos</title>
+        </head>
+        <body>
+          <h1>Request headers:</h1>
+          <p>${JSON.stringify(req.headers, null, 2).split(",").join("<br>")}</p>
+          <h2>Metodo:${req.method}</h2>
+          <h3>URL:${req.url}</h3>
+        </body>
+      </html>`);//Aqui va el html
     } else {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.end('Ruta no encontrada');
